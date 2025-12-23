@@ -207,7 +207,7 @@ const TRACK_IDS = [
 
 const TRACK_SET = new Set(TRACK_IDS);
 
-const extractTrackId = (value) => {
+const extractTrackId = (value: string): string | null => {
   const trimmed = value.trim();
   if (!trimmed) return null;
   const match = trimmed.match(
@@ -233,11 +233,16 @@ const RESULT_COPY = {
   },
 };
 
+interface Result {
+  status: 'in' | 'out' | 'invalid';
+  id: string | null;
+}
+
 const App = () => {
   const [input, setInput] = useState("");
-  const [result, setResult] = useState(null);
+  const [result, setResult] = useState<Result | null>(null);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const id = extractTrackId(input);
     if (!id) {
@@ -265,7 +270,7 @@ const App = () => {
           type="text"
           placeholder="https://open.spotify.com/track/..."
           value={input}
-          onChange={(event) => {
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setInput(event.target.value);
             setResult(null);
           }}
